@@ -31,7 +31,7 @@ export const exampleRouter = router({
           id: input.id,
         },
       });
-      var referralLinks;
+      let referralLinks;
       if (thisReferral && thisReferral.referralLinkCanBeReused === true) {
         referralLinks = await ctx.prisma.referralLink.findMany({
           select: {
