@@ -22,6 +22,7 @@ model Referral{
   updatedAt DateTime @updatedAt
   name String
   isActive Boolean
+  referralLinkCanBeReused Boolean @default(false)
   referralLinks ReferralLink[]
   description String?
 }

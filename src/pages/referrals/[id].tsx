@@ -47,6 +47,7 @@ const ReferralPage: NextPage = () => {
                 title={`Referral for ${data.referral.name}`}
                 referralLink={data.referralLink!.referralUrl}
                 referralLinkId={data.referralLink!.id}
+                referralLinkCanBeReused={data.referral!.referralLinkCanBeReused}
               />
             ) : (
               <div className="flex max-w-xs flex-col gap-4 overflow-hidden rounded-xl bg-white/10 p-4 text-white">
@@ -125,10 +126,12 @@ const Card = ({
   title,
   referralLink,
   referralLinkId,
+  referralLinkCanBeReused,
 }: {
   title: string;
   referralLink: string;
   referralLinkId: string;
+  referralLinkCanBeReused: boolean;
 }) => {
   const mutateUsedLink = trpc.example.setReferralLinkUsed.useMutation();
 
@@ -156,14 +159,16 @@ const Card = ({
         >
           🖨️
         </span>
-        <div className="mt-5 flex items-center justify-center">
-          <button
-            onClick={handleLinkNotWorkingClick}
-            className="w-1/2 rounded-md border border-white px-2 py-1 text-sm hover:bg-white/20"
-          >
-            The link is already used
-          </button>
-        </div>
+        {!referralLinkCanBeReused && (
+          <div className="mt-5 flex items-center justify-center">
+            <button
+              onClick={handleLinkNotWorkingClick}
+              className="w-1/2 rounded-md border border-white px-2 py-1 text-sm hover:bg-white/20"
+            >
+              The link is already used
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -25,21 +25,35 @@ export const exampleRouter = router({
           id: true,
           isActive: true,
           name: true,
+          referralLinkCanBeReused: true,
         },
         where: {
           id: input.id,
         },
       });
-      const referralLinks = await ctx.prisma.referralLink.findMany({
-        select: {
-          id: true,
-          referralUrl: true,
-        },
-        where: {
-          referralId: input.id,
-          isUsed: false,
-        },
-      });
+      var referralLinks;
+      if (thisReferral && thisReferral.referralLinkCanBeReused === true) {
+        referralLinks = await ctx.prisma.referralLink.findMany({
+          select: {
+            id: true,
+            referralUrl: true,
+          },
+          where: {
+            referralId: input.id,
+          },
+        });
+      } else {
+        referralLinks = await ctx.prisma.referralLink.findMany({
+          select: {
+            id: true,
+            referralUrl: true,
+          },
+          where: {
+            referralId: input.id,
+            isUsed: false,
+          },
+        });
+      }
       const thisRandomReferralLink =
         referralLinks[Math.floor(Math.random() * referralLinks.length)];
 
