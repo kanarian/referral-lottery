@@ -18,6 +18,7 @@ const Home: NextPage = () => {
   if (error) {
     return <div>Error</div>;
   }
+  const gridLayoutLg = activeReferrals.length > 6 ? "lg:grid-cols-3" : "";
 
   return (
     <>
@@ -31,7 +32,7 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Referral <span className="text-[hsl(280,100%,70%)]">Lottery</span>
           </h1>
-          <div className="grid grid-cols-1 gap-4 md:gap-8">
+          <div className={`grid grid-cols-1 gap-4 md:gap-8 ${gridLayoutLg}`}>
             {activeReferrals.map((referral) => (
               <Card
                 key={referral.id}
