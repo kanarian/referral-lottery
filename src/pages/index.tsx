@@ -11,14 +11,14 @@ const Home: NextPage = () => {
     error,
   } = trpc.example.getAllActiveReferrals.useQuery();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (error) {
     return <div>Error</div>;
   }
-  const gridLayoutLg = activeReferrals.length > 6 ? "lg:grid-cols-3" : "";
+  // const gridLayoutLg = activeReferrals.length > 6 ? "lg:grid-cols-3" : "";
 
   return (
     <>
@@ -32,17 +32,25 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Referral <span className="text-[hsl(280,100%,70%)]">Lottery</span>
           </h1>
-          <div className={`grid grid-cols-1 gap-4 md:gap-8 ${gridLayoutLg}`}>
-            {activeReferrals
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((referral) => (
-                <Card
-                  key={referral.id}
-                  title={referral.name}
-                  link={`/referrals/${referral.id}`}
-                />
-              ))}
-          </div>
+          {isLoading && <div className="text-4xl text-white">Loading...</div>}
+          {error && <div className="text-4xl text-white">Error</div>}
+          {!isLoading && !error && (
+            <div
+              className={`grid grid-cols-1 gap-4 md:gap-8 ${
+                activeReferrals.length > 6 ? "lg:grid-cols-3" : ""
+              }`}
+            >
+              {activeReferrals
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((referral) => (
+                  <Card
+                    key={referral.id}
+                    title={referral.name}
+                    link={`/referrals/${referral.id}`}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       </main>
     </>

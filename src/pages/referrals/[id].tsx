@@ -13,15 +13,6 @@ const ReferralPage: NextPage = () => {
     { enabled: router.query.id !== undefined }
   );
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error</div>;
-  }
-  const isReferralLink = data.referralLink;
-
   return (
     <>
       <Head>
@@ -38,29 +29,35 @@ const ReferralPage: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Referral for{" "}
             <span className="text-[hsl(280,100%,70%)]">
-              {data.referral.name}
+              {data?.referral.name ?? "..."}
             </span>
           </h1>
-          <div className="grid grid-cols-1 gap-4 md:gap-8">
-            {isReferralLink ? (
-              <Card
-                title={`Referral for ${data.referral.name}`}
-                referralLink={data.referralLink!.referralUrl}
-                referralLinkId={data.referralLink!.id}
-                referralLinkCanBeReused={data.referral!.referralLinkCanBeReused}
+          {isLoading && <div className="text-4xl text-white">Loading...</div>}
+          {error && <div className="text-4xl text-white">Error</div>}
+          {!isLoading && !error && (
+            <div className="grid grid-cols-1 gap-4 md:gap-8">
+              {data.referralLink ? (
+                <Card
+                  title={`Referral for ${data.referral.name}`}
+                  referralLink={data.referralLink!.referralUrl}
+                  referralLinkId={data.referralLink!.id}
+                  referralLinkCanBeReused={
+                    data.referral!.referralLinkCanBeReused
+                  }
+                />
+              ) : (
+                <div className="flex max-w-xs flex-col gap-4 overflow-hidden rounded-xl bg-white/10 p-4 text-white">
+                  <h3 className="text-2xl font-bold">
+                    No links for {data.referral.name} 😢
+                  </h3>
+                </div>
+              )}
+              <Form
+                referralId={data.referral.id}
+                referralName={data.referral.name}
               />
-            ) : (
-              <div className="flex max-w-xs flex-col gap-4 overflow-hidden rounded-xl bg-white/10 p-4 text-white">
-                <h3 className="text-2xl font-bold">
-                  No links for {data.referral.name} 😢
-                </h3>
-              </div>
-            )}
-            <Form
-              referralId={data.referral.id}
-              referralName={data.referral.name}
-            />
-          </div>
+            </div>
+          )}
         </div>
       </main>
     </>
