@@ -33,13 +33,15 @@ const Home: NextPage = () => {
             Referral <span className="text-[hsl(280,100%,70%)]">Lottery</span>
           </h1>
           <div className={`grid grid-cols-1 gap-4 md:gap-8 ${gridLayoutLg}`}>
-            {activeReferrals.map((referral) => (
-              <Card
-                key={referral.id}
-                title={referral.name}
-                link={`/referrals/${referral.id}`}
-              />
-            ))}
+            {activeReferrals
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((referral) => (
+                <Card
+                  key={referral.id}
+                  title={referral.name}
+                  link={`/referrals/${referral.id}`}
+                />
+              ))}
           </div>
         </div>
       </main>
