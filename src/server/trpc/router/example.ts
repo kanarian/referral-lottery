@@ -65,6 +65,29 @@ export const exampleRouter = router({
   createReferralLink: publicProcedure
     .input(z.object({ id: z.string(), url: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      // check if referral exists
+      const referral = await ctx.prisma.referralLink.findUnique({
+        where: {
+          referralUrl: input.url,
+        },
+      });
+
+      if (referral && referral.isUsed === false) {
+        throw new Error("Referral link already exists");
+      }
+
+      if (referral && referral.isUsed === true) {
+        const referralLink = await ctx.prisma.referralLink.update({
+          where: {
+            referralUrl: input.url,
+          },
+          data: {
+            isUsed: false,
+          },
+        });
+        return referralLink;
+      }
+
       const referralLink = await ctx.prisma.referralLink.create({
         data: {
           referralUrl: input.url,
